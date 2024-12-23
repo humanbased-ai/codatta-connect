@@ -15,7 +15,7 @@ export default function WalletConnectWidget(props: {
   const [step, setStep] = useState(wallet.installed ? 'connect' : 'qr')
 
   async function handleSignFinish(wallet: WalletItem, signInfo: WalletSignInfo) {
-    onConnect(wallet, signInfo)
+    await onConnect(wallet, signInfo)
   }
 
   return (

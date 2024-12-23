@@ -135,7 +135,6 @@ export default function WalletQr(props: {
     } catch (err: any) {
       console.log('err', err)
       setError(err.details || err.message)
-      
     }
   }
 
