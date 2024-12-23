@@ -11,7 +11,7 @@ export interface TonWalletConnectInfo {
     client: TonConnect;
     connect_info: Wallet;
 }
-export default function CodattaConnect(props: {
+export declare function CodattaConnect(props: {
     onEvmWalletConnect: (connectInfo: EmvWalletConnectInfo) => Promise<void>;
     onTonWalletConnect: (connectInfo: TonWalletConnectInfo) => Promise<void>;
     onEmailConnect: (email: string, code: string) => Promise<void>;

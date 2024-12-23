@@ -1,8 +1,8 @@
-import { C as e, d as n, a as C, u as s } from "./main-Dv8NlLmw.js";
-import "react";
+import { f as o, C as n, d as e, a as C, u as s } from "./main-DfEBGh6l.js";
 export {
-  e as CodattaConnectContextProvider,
-  n as CodattaSignin,
+  o as CodattaConnect,
+  n as CodattaConnectContextProvider,
+  e as CodattaSignin,
   C as coinbaseWallet,
   s as useCodattaConnectContext
 };
