@@ -2850,7 +2850,7 @@ function jO(t) {
   return Bl(`0x${e}`);
 }
 async function UO({ hash: t, signature: e }) {
-  const r = ya(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-S2RhtMGq.js");
+  const r = ya(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-DxcrBxlU.js");
   return `0x${(() => {
     if (typeof e == "object" && "r" in e && "s" in e) {
       const { r: l, s: d, v: p, yParity: w } = e, A = Number(w ?? p), P = T2(A);
@@ -43210,7 +43210,7 @@ function voe(t) {
 function ose(t) {
   const { wallet: e, onConnect: r } = t, [n, i] = Gt(e.installed ? "connect" : "qr");
   async function s(o, a) {
-    r(o, a);
+    await r(o, a);
   }
   return /* @__PURE__ */ fe.jsxs(so, { children: [
     /* @__PURE__ */ fe.jsx("div", { className: "mb-6", children: /* @__PURE__ */ fe.jsx(Pc, { title: "Connect wallet", onBack: t.onBack }) }),
