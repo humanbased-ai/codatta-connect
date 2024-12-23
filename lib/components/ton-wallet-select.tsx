@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { SignInOptionItem } from './wallet-option'
-import TonConnect, { WalletInfo } from '@tonconnect/sdk'
+import TonConnect, { WalletInfo, WalletInfoInjectable, WalletInfoRemote } from '@tonconnect/sdk'
 import TransitionEffect from './transition-effect'
 import ControlHead from './control-head'
 import { Search } from 'lucide-react'
@@ -16,7 +16,7 @@ function TonWalletOption(props: { wallet: WalletInfo, onClick: (wallet: WalletIn
 
 export default function TonWalletSelect(props: {
   connector: TonConnect
-  onSelect: (wallet: WalletInfo) => void
+  onSelect: (wallet: WalletInfoRemote | WalletInfoInjectable) => void
   onBack: () => void
 }) {
   const { connector } = props
@@ -44,7 +44,7 @@ export default function TonWalletSelect(props: {
     init()
   }, [])
 
-  function handleSelectWallet(wallet: WalletInfo) {
+  function handleSelectWallet(wallet: WalletInfoRemote | WalletInfoInjectable) {
     props.onSelect(wallet)
   }
 

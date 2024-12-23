@@ -81,9 +81,10 @@ export function CodattaSignin(props: {
             }}
           ></SigninIndex>
         )}
-        {step === 'all-wallet' && (<EvmWalletSelect onBack={() => setStep('index')}
-          onSelectWallet={handleSelectWallet}
-        ></EvmWalletSelect>
+        {step === 'all-wallet' && (
+          <EvmWalletSelect onBack={() => setStep('index')}
+            onSelectWallet={handleSelectWallet}
+          ></EvmWalletSelect>
         )}
       </AnimateContainer>
     </CodattaSinginContextProvider>

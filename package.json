@@ -1,6 +1,6 @@
 {
   "name": "codatta-connect",
-  "version": "2.1.6",
+  "version": "2.1.8",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
@@ -10,7 +10,7 @@
     "url": "git+https://github.com/codatta/codatta-connect.git"
   },
   "scripts": {
-    "dev": "vite dev -c vite.config.dev.ts",
+    "dev": "vite dev -c vite.config.dev.ts --host",
     "build": "vite build -c vite.config.build.ts"
   },
   "dependencies": {

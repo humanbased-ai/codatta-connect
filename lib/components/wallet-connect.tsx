@@ -4,9 +4,18 @@ import accountApi from '../api/account.api'
 import { Loader2 } from 'lucide-react'
 import { WalletItem } from '../types/wallet-item.class'
 import { useCodattaConnectContext } from '../codatta-connect-context-provider'
+import { getAddress } from 'viem'
 
 const CONNECT_GUIDE_MESSAGE = 'Accept connection request in the wallet'
 const MESSAGE_SIGN_GUIDE_MESSAGE = 'Accept sign-in request in your wallet'
+
+export interface WalletSignInfo {
+  message: string
+  nonce: string
+  signature: string
+  address: string
+  wallet_name: string
+}
 
 function getSiweMessage(address: `0x${string}`, nonce: string) {
   const domain = window.location.host
@@ -24,13 +33,7 @@ function getSiweMessage(address: `0x${string}`, nonce: string) {
 
 export default function WalletConnect(props: {
   wallet: WalletItem
-  onSignFinish: (wallet:WalletItem , params: {
-    message: string
-    nonce: string
-    signature: string
-    address: string
-    wallet_name: string
-  }) => Promise<void>
+  onSignFinish: (wallet:WalletItem , params: WalletSignInfo) => Promise<void>
   onShowQrCode: () => void
 }) {
   const [error, setError] = useState<string>()
@@ -42,18 +45,19 @@ export default function WalletConnect(props: {
   async function walletSignin(nonce: string) {
     try {
       setGuideType('connect')
-      const address = await wallet.connect()
-      if (!address || address.length === 0) {
+      const addresses = await wallet.connect()
+      if (!addresses || addresses.length === 0) {
         throw new Error('Wallet connect error')
       }
-      const message = getSiweMessage(address[0], nonce)
+      const address = getAddress(addresses[0])
+      const message = getSiweMessage(address, nonce)
       setGuideType('sign')
-      const signature = await wallet.signMessage(message, address[0])
+      const signature = await wallet.signMessage(message, address)
       if (!signature || signature.length === 0) {
         throw new Error('user sign error')
       }
       setGuideType('waiting')
-      await onSignFinish(wallet, { address: address[0], signature, message, nonce, wallet_name: wallet.config?.name || '' })
+      await onSignFinish(wallet, { address, signature, message, nonce, wallet_name: wallet.config?.name || '' })
       saveLastUsedWallet(wallet)
     } catch (err: any) {
       console.log(err.details)

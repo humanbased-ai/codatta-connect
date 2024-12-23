@@ -15,7 +15,7 @@ export default function TonWalletConnect(props: {
   connector: TonConnect
   wallet: WalletInfoRemote | WalletInfoInjectable
   onBack: () => void
-  loading: boolean
+  loading?: boolean
 }) {
   const { wallet, connector, loading } = props
   const qrCodeContainer = useRef<HTMLDivElement>(null)
@@ -24,7 +24,6 @@ export default function TonWalletConnect(props: {
   const [nonce, setNonce] = useState<string>()
   const [_guideType, _setGuideType] = useState<'connect' | 'sign' | 'waiting'>('connect')
   const [qrLoading, setQrLoading] = useState<boolean>(false)
-  // const { saveLastUsedWallet } = useCodattaConnectContext()
   const [link, setLink] = useState<string>()
 
 

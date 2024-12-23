@@ -1,5 +1,6 @@
 import { TDeviceType } from '@/api/account.api'
 import { createContext, useContext, useEffect, useState } from 'react'
+import 'https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js'
 
 export interface CodattaSigninConfig {
   channel: string,

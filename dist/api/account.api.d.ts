@@ -1,4 +1,5 @@
 import { AxiosInstance } from 'axios';
+import { TonProofItemReply } from '@tonconnect/sdk';
 type TAccountType = 'email' | 'block_chain';
 export type TAccountRole = 'B' | 'C';
 export type TDeviceType = 'WEB' | 'TG' | 'PLUG';
@@ -23,7 +24,18 @@ interface ILoginParamsBase {
         [key: string]: any;
     };
 }
+interface IConnectParamsBase {
+    account_type: string;
+    connector: 'codatta_email' | 'codatta_wallet' | 'codatta_ton';
+    account_enum: TAccountRole;
+}
 interface IEmailLoginParams extends ILoginParamsBase {
+    connector: 'codatta_email';
+    account_type: 'email';
+    email: string;
+    email_code: string;
+}
+interface IEmailConnectParams extends IConnectParamsBase {
     connector: 'codatta_email';
     account_type: 'email';
     email: string;
@@ -39,13 +51,35 @@ interface IWalletLoginParams extends ILoginParamsBase {
     signature: string;
     message: string;
 }
+interface IWalletConnectParams extends IConnectParamsBase {
+    connector: 'codatta_wallet';
+    account_type: 'block_chain';
+    address: string;
+    wallet_name: string;
+    chain: string;
+    nonce: string;
+    signature: string;
+    message: string;
+}
 interface ITonLoginParams extends ILoginParamsBase {
     connector: 'codatta_ton';
     account_type: 'block_chain';
     wallet_name: string;
     address: string;
     chain: string;
-    connect_info: object[];
+    connect_info: [{
+        [key: string]: string;
+    }, TonProofItemReply];
+}
+interface ITonConnectParams extends IConnectParamsBase {
+    connector: 'codatta_ton';
+    account_type: 'block_chain';
+    wallet_name: string;
+    address: string;
+    chain: string;
+    connect_info: [{
+        [key: string]: string;
+    }, TonProofItemReply];
 }
 declare class AccountApi {
     private request;
@@ -68,6 +102,9 @@ declare class AccountApi {
     tonLogin(props: ITonLoginParams): Promise<{
         data: ILoginResponse;
     }>;
+    bindEmail(props: IEmailConnectParams): Promise<any>;
+    bindTonWallet(props: ITonConnectParams): Promise<any>;
+    bindEvmWallet(props: IWalletConnectParams): Promise<any>;
 }
 declare const _default: AccountApi;
 export default _default;

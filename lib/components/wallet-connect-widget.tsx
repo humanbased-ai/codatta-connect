@@ -2,20 +2,20 @@ import { useState } from 'react'
 import ControlHead from './control-head'
 import TransitionEffect from './transition-effect'
 import WalletQr from './wallet-qr'
-import WalletConnect from './wallet-connect'
+import WalletConnect, { WalletSignInfo } from './wallet-connect'
 import GetWallet from './get-wallet'
 import { WalletItem } from '../types/wallet-item.class'
 
 export default function WalletConnectWidget(props: {
   wallet: WalletItem
-  onConnect: (wallet: WalletItem) => void
+  onConnect: (wallet: WalletItem, signInfo:WalletSignInfo) => void
   onBack: () => void
 }) {
   const { wallet, onConnect } = props
   const [step, setStep] = useState(wallet.installed ? 'connect' : 'qr')
 
-  async function handleSignFinish() {
-    onConnect(wallet)
+  async function handleSignFinish(wallet: WalletItem, signInfo: WalletSignInfo) {
+    onConnect(wallet, signInfo)
   }
 
   return (
