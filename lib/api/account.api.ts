@@ -104,8 +104,10 @@ class AccountApi {
     return data.data
   }
 
-  public async getEmailCode(props: { account_type: TAccountType , email: string}) {
-    const { data } = await this.request.post<{ data: string }>(`${this._apiBase}/api/v2/user/get_code`, props)
+  public async getEmailCode(props: { account_type: TAccountType , email: string}, captcha:string) {
+    const { data } = await this.request.post<{ data: string }>(`${this._apiBase}/api/v2/user/get_code`, props, {
+      headers: {'Captcha-Param': captcha}
+    })
     return data.data
   }
 

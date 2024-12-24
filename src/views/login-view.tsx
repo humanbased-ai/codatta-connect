@@ -1,6 +1,6 @@
 import accountApi, { ILoginResponse } from '../../lib/api/account.api'
-import CodattaConnect, { EmvWalletConnectInfo, TonWalletConnectInfo } from '../../lib/codatta-connect'
-import { CodattaSignin } from '../../lib/main'
+import { EmvWalletConnectInfo, TonWalletConnectInfo } from '../../lib/codatta-connect'
+import { CodattaSignin, CodattaConnect } from '../../lib/main'
 import React from 'react'
 
 export default function LoginView() {
@@ -38,7 +38,6 @@ export default function LoginView() {
         connectItems.tonProof
       ],
     })
-
   }
 
   async function handleEvmWalletConnect(info: EmvWalletConnectInfo) {
@@ -66,15 +65,16 @@ export default function LoginView() {
       config={{
         showEmailSignIn: true,
         showFeaturedWallets: true,
-        showTonConnect: true
+        showTonConnect: true,
+        showMoreWallets: true
       }}
     ></CodattaConnect>
-    <CodattaSignin onLogin={handleLogin} config={{
+    {/* <CodattaSignin onLogin={handleLogin} config={{
       channel:'test',
       device:'WEB',
       app:'test',
       inviterCode:''
-    }}></CodattaSignin>
+    }}></CodattaSignin> */}
     </>
   )
 }

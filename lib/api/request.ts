@@ -23,8 +23,27 @@ function responseBaseInterceptor(res: AxiosResponse) {
   }
 }
 
+function responseErrorInterceptor(error: AxiosError<{errorMessage:string, errorCode:string | number}>) {
+  console.log(error)
+  const responseData = error.response?.data
+  if (responseData) {
+    console.log(responseData, 'responseData')
+    const err = new AxiosError(
+      responseData.errorMessage,
+      error.code,
+      error.config,
+      error.request,
+      error.response
+    )
+    return Promise.reject(err)
+  } else {
+    return Promise.reject(error)
+  }
+}
+
 request.interceptors.response.use(
   responseBaseInterceptor,
+  responseErrorInterceptor
 )
 
 export default request

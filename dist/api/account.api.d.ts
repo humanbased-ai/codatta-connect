@@ -92,7 +92,7 @@ declare class AccountApi {
     getEmailCode(props: {
         account_type: TAccountType;
         email: string;
-    }): Promise<string>;
+    }, captcha: string): Promise<string>;
     emailLogin(props: IEmailLoginParams): Promise<{
         data: ILoginResponse;
     }>;

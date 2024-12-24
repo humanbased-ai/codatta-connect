@@ -1,22 +1,22 @@
 
 import TransitionEffect from './transition-effect'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from './ui/input-otp'
-import accountApi from '@/api/account.api'
-import { Loader2, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import Spin from './ui/spin'
 import { cn } from '@udecode/cn'
+import 'https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js'
 
 export default function EmailConnect(props: {
   email: string
-  onInputCode: (email:string, code:string) => Promise<void>
+  onInputCode: (email: string, code: string) => Promise<void>
+  onResendCode: () => void
 }) {
   const { email } = props
   const [count, setCount] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [sendingCode, setSendingCode] = useState(false)
-  const [getCodeError, setGetCodeError] = useState<string>('')
   const [connectError, setConnectError] = useState('')
+  const sendCodeButton = useRef<HTMLButtonElement>(null)
 
   async function startCountDown() {
     setCount(60)
@@ -31,23 +31,6 @@ export default function EmailConnect(props: {
     }, 1000)
   }
 
-  async function sendEmailCode(email: string) {
-    setSendingCode(true)
-    try {
-      setGetCodeError('')
-      await accountApi.getEmailCode({ account_type: 'email', email })
-      startCountDown()
-    } catch (err: any) {
-      setGetCodeError(err.message)
-    }
-    setSendingCode(false)
-  }
-
-  useEffect(() => {
-    if (!email) return
-    sendEmailCode(email)
-  }, [email])
-
   async function handleOTPChange(value: string) {
     setConnectError('')
     if (value.length < 6) return
@@ -60,17 +43,17 @@ export default function EmailConnect(props: {
     setLoading(false)
   }
 
+  useEffect(() => {
+    startCountDown()
+  }, [])
+
   return (
     <TransitionEffect>
       <div className='xc-flex xc-flex-col xc-items-center xc-justify-center xc-mb-12'>
         <Mail className='xc-mb-4' size={60}></Mail>
         <div className='xc-flex xc-flex-col xc-items-center xc-justify-center xc-mb-8 xc-h-16'>
-          {getCodeError ? <div className='xc-text-[#ff0000] xc-text-center'><p className='xc-px-8'>{getCodeError}</p></div> :
-            sendingCode ? <Loader2 className="xc-animate-spin"></Loader2> : <>
-              <p className='xc-text-lg xc-mb-1'>We’ve sent a verification code to</p>
-              <p className='xc-font-bold xc-text-center'>{email}</p>
-            </>
-          }
+          <p className='xc-text-lg xc-mb-1'>We’ve sent a verification code to</p>
+          <p className='xc-font-bold xc-text-center'>{email}</p>
         </div>
 
         <div className='xc-mb-2 xc-h-12'>
@@ -93,9 +76,9 @@ export default function EmailConnect(props: {
       </div>
 
       <div className='xc-text-center xc-text-sm xc-text-gray-400'>
-        Not get it? {count ? `Recend in ${count}s` : <button onClick={() => sendEmailCode(email)}>Send again</button>}
+        Not get it? {count ? `Recend in ${count}s` : <button id="sendCodeButton" ref={sendCodeButton}>Send again</button>}
       </div>
-
+      <div id="captcha-element"></div>
     </TransitionEffect>
   )
 }

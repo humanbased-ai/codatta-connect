@@ -112,7 +112,7 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
         if (lastUsedInfo.provider === 'UniversalProvider') {
           const provider = await UniversalProvider.init(walletConnectConfig)
           if (provider.session) lastUsedWallet.setUniversalProvider(provider)
-          }
+        }
         setLastUsedWallet(lastUsedWallet)
       }
     } catch (err) {

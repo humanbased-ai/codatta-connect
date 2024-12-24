@@ -20,7 +20,7 @@ export default function WalletConnectWidget(props: {
 
   return (
     <TransitionEffect>
-      <div className="mb-6">
+      <div className="xc-mb-6">
         <ControlHead title={'Connect wallet'} onBack={props.onBack} />
       </div>
       {step === 'qr' && (

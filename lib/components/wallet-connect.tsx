@@ -33,7 +33,7 @@ function getSiweMessage(address: `0x${string}`, nonce: string) {
 
 export default function WalletConnect(props: {
   wallet: WalletItem
-  onSignFinish: (wallet:WalletItem , params: WalletSignInfo) => Promise<void>
+  onSignFinish: (wallet: WalletItem, params: WalletSignInfo) => Promise<void>
   onShowQrCode: () => void
 }) {
   const [error, setError] = useState<string>()
@@ -73,7 +73,7 @@ export default function WalletConnect(props: {
   async function initWalletConnect() {
     try {
       setError('')
-      const res = await accountApi.getNonce({account_type: 'block_chain'})
+      const res = await accountApi.getNonce({ account_type: 'block_chain' })
       nonce.current = res
       walletSignin(nonce.current)
     } catch (err: any) {
