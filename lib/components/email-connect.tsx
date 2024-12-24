@@ -1,6 +1,6 @@
 
 import TransitionEffect from './transition-effect'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from './ui/input-otp'
 import { Mail } from 'lucide-react'
 import Spin from './ui/spin'
@@ -16,7 +16,6 @@ export default function EmailConnect(props: {
   const [count, setCount] = useState(0)
   const [loading, setLoading] = useState(false)
   const [connectError, setConnectError] = useState('')
-  const sendCodeButton = useRef<HTMLButtonElement>(null)
 
   async function startCountDown() {
     setCount(60)
@@ -76,7 +75,7 @@ export default function EmailConnect(props: {
       </div>
 
       <div className='xc-text-center xc-text-sm xc-text-gray-400'>
-        Not get it? {count ? `Recend in ${count}s` : <button id="sendCodeButton" ref={sendCodeButton}>Send again</button>}
+        Not get it? {count ? `Recend in ${count}s` : <button id="sendCodeButton" onClick={props.onResendCode}>Send again</button>}
       </div>
       <div id="captcha-element"></div>
     </TransitionEffect>
