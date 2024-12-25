@@ -14,12 +14,8 @@ export default function EmailCaptcha(props: { email: string, onCodeSend: () => v
 
   async function sendEmailCode(email: string, captcha: string) {
     setSendingCode(true)
-    try {
-      setGetCodeError('')
-      await accountApi.getEmailCode({ account_type: 'email', email }, captcha)
-    } catch (err: any) {
-      setGetCodeError(err.message)
-    }
+    setGetCodeError('')
+    await accountApi.getEmailCode({ account_type: 'email', email }, captcha)
     setSendingCode(false)
   }
 
