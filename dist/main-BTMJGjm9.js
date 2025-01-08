@@ -2850,7 +2850,7 @@ function UO(t) {
   return Bl(`0x${e}`);
 }
 async function qO({ hash: t, signature: e }) {
-  const r = va(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-CFcsUqQG.js");
+  const r = va(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-Vxeo4UZR.js");
   return `0x${(() => {
     if (typeof e == "object" && "r" in e && "s" in e) {
       const { r: l, s: d, v: p, yParity: w } = e, A = Number(w ?? p), M = I2(A);
@@ -38129,14 +38129,6 @@ function M9(t) {
   }
   return /* @__PURE__ */ pe.jsx(Ms, { children: i && /* @__PURE__ */ pe.jsxs(pe.Fragment, { children: [
     t.header || /* @__PURE__ */ pe.jsx("div", { className: "xc-mb-6 xc-text-xl xc-font-bold", children: "Log in or sign up" }),
-    l.showEmailSignIn && /* @__PURE__ */ pe.jsxs("div", { className: "xc-mb-4", children: [
-      /* @__PURE__ */ pe.jsx("input", { className: "xc-w-full xc-bg-transparent xc-border-white xc-border xc-border-opacity-15 xc-h-10 xc-rounded-lg xc-px-3 xc-mb-3", placeholder: "Enter your email", type: "email", onChange: w, onKeyDown: M }),
-      /* @__PURE__ */ pe.jsx("button", { disabled: !d, className: "xc-bg-[rgb(135,93,255)] xc-text-white xc-w-full xc-rounded-lg xc-py-2 disabled:xc-bg-opacity-10 disabled:xc-text-opacity-50 disabled:xc-bg-white xc-transition-all", onClick: A, children: "Continue" })
-    ] }),
-    l.showEmailSignIn && (l.showFeaturedWallets || l.showTonConnect) && /* @__PURE__ */ pe.jsx("div", { className: "xc-mb-4", children: /* @__PURE__ */ pe.jsxs(P9, { className: "xc-opacity-20", children: [
-      " ",
-      /* @__PURE__ */ pe.jsx("span", { className: "xc-text-sm xc-opacity-20", children: "OR" })
-    ] }) }),
     /* @__PURE__ */ pe.jsxs("div", { children: [
       /* @__PURE__ */ pe.jsxs("div", { className: "xc-mb-4 xc-flex xc-max-h-[309px] xc-flex-col xc-gap-4 xc-overflow-scroll no-scrollbar", children: [
         l.showFeaturedWallets && n && n.map((N) => /* @__PURE__ */ pe.jsx(
@@ -38157,6 +38149,14 @@ function M9(t) {
         )
       ] }),
       l.showMoreWallets && /* @__PURE__ */ pe.jsx(Ine, { onClick: a })
+    ] }),
+    l.showEmailSignIn && (l.showFeaturedWallets || l.showTonConnect) && /* @__PURE__ */ pe.jsx("div", { className: "xc-mb-4 xc-mt-4", children: /* @__PURE__ */ pe.jsxs(P9, { className: "xc-opacity-20", children: [
+      " ",
+      /* @__PURE__ */ pe.jsx("span", { className: "xc-text-sm xc-opacity-20", children: "OR" })
+    ] }) }),
+    l.showEmailSignIn && /* @__PURE__ */ pe.jsxs("div", { className: "xc-mb-4", children: [
+      /* @__PURE__ */ pe.jsx("input", { className: "xc-w-full xc-bg-transparent xc-border-white xc-border xc-border-opacity-15 xc-h-10 xc-rounded-lg xc-px-3 xc-mb-3", placeholder: "Enter your email", type: "email", onChange: w, onKeyDown: M }),
+      /* @__PURE__ */ pe.jsx("button", { disabled: !d, className: "xc-bg-[rgb(135,93,255)] xc-text-white xc-w-full xc-rounded-lg xc-py-2 disabled:xc-bg-opacity-10 disabled:xc-text-opacity-50 disabled:xc-bg-white xc-transition-all", onClick: A, children: "Continue" })
     ] })
   ] }) });
 }

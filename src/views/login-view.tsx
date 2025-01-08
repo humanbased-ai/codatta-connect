@@ -58,7 +58,7 @@ export default function LoginView() {
 
   return (<>
   
-    <CodattaConnect
+    {/* <CodattaConnect
       onEmailConnect={handleEmailConnect}
       onEvmWalletConnect={handleEvmWalletConnect}
       onTonWalletConnect={handleTonWalletConnect}
@@ -68,13 +68,13 @@ export default function LoginView() {
         showTonConnect: true,
         showMoreWallets: true
       }}
-    ></CodattaConnect>
-    {/* <CodattaSignin onLogin={handleLogin} config={{
+    ></CodattaConnect> */}
+    <CodattaSignin onLogin={handleLogin} config={{
       channel:'test',
       device:'WEB',
       app:'test',
       inviterCode:''
-    }}></CodattaSignin> */}
+    }}></CodattaSignin>
     </>
   )
 }
