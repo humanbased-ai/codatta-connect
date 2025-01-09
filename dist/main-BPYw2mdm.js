@@ -2850,7 +2850,7 @@ function UO(t) {
   return Bl(`0x${e}`);
 }
 async function qO({ hash: t, signature: e }) {
-  const r = va(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-Vxeo4UZR.js");
+  const r = va(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-zOw5-Bh-.js");
   return `0x${(() => {
     if (typeof e == "object" && "r" in e && "s" in e) {
       const { r: l, s: d, v: p, yParity: w } = e, A = Number(w ?? p), M = I2(A);
@@ -38464,7 +38464,7 @@ function k9(t) {
     ] }),
     /* @__PURE__ */ pe.jsxs("div", { className: "xc-text-center xc-text-sm xc-text-gray-400", children: [
       "Not get it? ",
-      r ? `Recend in ${r}s` : /* @__PURE__ */ pe.jsx("button", { id: "sendCodeButton", onClick: t.onResendCode, children: "Send again" })
+      r ? `Resend in ${r}s` : /* @__PURE__ */ pe.jsx("button", { id: "sendCodeButton", onClick: t.onResendCode, children: "Send again" })
     ] }),
     /* @__PURE__ */ pe.jsx("div", { id: "captcha-element" })
   ] });

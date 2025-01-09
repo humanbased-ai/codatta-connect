@@ -75,7 +75,7 @@ export default function EmailConnect(props: {
       </div>
 
       <div className='xc-text-center xc-text-sm xc-text-gray-400'>
-        Not get it? {count ? `Recend in ${count}s` : <button id="sendCodeButton" onClick={props.onResendCode}>Send again</button>}
+        Not get it? {count ? `Resend in ${count}s` : <button id="sendCodeButton" onClick={props.onResendCode}>Send again</button>}
       </div>
       <div id="captcha-element"></div>
     </TransitionEffect>
