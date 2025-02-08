@@ -39,7 +39,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://app.codatta.io',
+        target: 'https://app-test.b18a.io',
         changeOrigin: true,
         configure: proxyDebug,
       },

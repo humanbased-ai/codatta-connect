@@ -26,7 +26,7 @@ export default function WalletLogin(props: {
   }) {
     const res = await accountApi.walletLogin({
       account_type: 'block_chain',
-      account_enum: 'C',
+      account_enum: config.role,
       connector: 'codatta_wallet',
       inviter_code: config.inviterCode,
       wallet_name: wallet.config?.name || wallet.key,

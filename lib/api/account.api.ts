@@ -8,7 +8,7 @@ export type TDeviceType = 'WEB' | 'TG' | 'PLUG'
 
 export interface ILoginResponse {
   token: string
-  old_token: string
+  old_token?: string
   user_id: string,
   new_user: boolean
 }
@@ -117,8 +117,13 @@ class AccountApi {
   }
 
   public async walletLogin(props: IWalletLoginParams) {
-    const res = await this.request.post<{ data: ILoginResponse }>(`${this._apiBase}/api/v2/user/login`, props)
-    return res.data
+    if (props.account_enum === 'C') {
+      const res = await this.request.post<{ data: ILoginResponse }>(`${this._apiBase}/api/v2/user/login`, props)
+      return res.data
+    } else {
+      const res = await this.request.post<{ data: ILoginResponse }>(`${this._apiBase}/api/v2/business/login`, props)
+      return res.data
+    }
   }
 
   public async tonLogin(props: ITonLoginParams) {

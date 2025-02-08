@@ -73,7 +73,7 @@ export default function LoginView() {
       channel:'test',
       device:'WEB',
       app:'test',
-      inviterCode:''
+      inviterCode:'',
     }}></CodattaSignin>
     </>
   )
