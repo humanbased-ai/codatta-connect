@@ -4,8 +4,11 @@ export interface CodattaSigninConfig {
     device: TDeviceType;
     app: string;
     inviterCode: string;
+    role?: "B" | "C";
 }
-export declare function useCodattaSigninContext(): CodattaSigninConfig;
+export declare function useCodattaSigninContext(): CodattaSigninConfig & {
+    role: "B" | "C";
+};
 interface CodattaConnectContextProviderProps {
     children: React.ReactNode;
     config: CodattaSigninConfig;

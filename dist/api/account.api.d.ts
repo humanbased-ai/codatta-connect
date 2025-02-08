@@ -5,7 +5,7 @@ export type TAccountRole = 'B' | 'C';
 export type TDeviceType = 'WEB' | 'TG' | 'PLUG';
 export interface ILoginResponse {
     token: string;
-    old_token: string;
+    old_token?: string;
     user_id: string;
     new_user: boolean;
 }

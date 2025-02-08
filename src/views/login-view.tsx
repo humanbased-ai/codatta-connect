@@ -74,6 +74,7 @@ export default function LoginView() {
       device:'WEB',
       app:'test',
       inviterCode:'',
+      role: 'B'
     }}></CodattaSignin>
     </>
   )
