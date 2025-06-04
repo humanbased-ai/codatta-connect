@@ -16,6 +16,11 @@ export declare class WalletItem {
     get featured(): boolean;
     get key(): string;
     get installed(): boolean;
+    get provider(): {
+        on: <event extends keyof import('viem').EIP1193EventMap>(event: event, listener: import('viem').EIP1193EventMap[event]) => void;
+        removeListener: <event extends keyof import('viem').EIP1193EventMap>(event: event, listener: import('viem').EIP1193EventMap[event]) => void;
+        request: import('viem').EIP1193RequestFn<import('viem').EIP1474Methods>;
+    } | UniversalProvider | null;
     get client(): WalletClient | null;
     get config(): WalletConfig | null;
     static fromWalletConfig(config: WalletConfig): WalletItem;
