@@ -34,6 +34,10 @@ export class WalletItem {
     return this._installed
   }
 
+  public get provider() {
+    return this._provider
+  }
+
 
   public get client(): WalletClient | null {
     if (!this._provider) return null

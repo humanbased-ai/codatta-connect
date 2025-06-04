@@ -55,6 +55,13 @@ interface CodattaConnectContextProviderProps {
   apiBaseUrl?: string
 }
 
+
+interface LastUsedWalletInfo {
+  provider: 'UniversalProvider' | 'EIP1193Provider',
+  key: string,
+  timestamp: number
+}
+
 export function CodattaConnectContextProvider(props: CodattaConnectContextProviderProps) {
   const { apiBaseUrl } = props
   const [wallets, setWallets] = useState<WalletItem[]>([])
@@ -63,7 +70,15 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
   const [initialized, setInitialized] = useState<boolean>(false)
 
   const saveLastUsedWallet = (wallet: WalletItem) => {
-    console.log('saveLastUsedWallet', wallet)
+    setLastUsedWallet(wallet)
+
+    const providerType = wallet.provider instanceof UniversalProvider ? 'UniversalProvider' : 'EIP1193Provider'
+    const lastUsedInfo: LastUsedWalletInfo = {
+      provider: providerType,
+      key: wallet.key,
+      timestamp: Date.now()
+    }
+    localStorage.setItem('xn-last-used-info', JSON.stringify(lastUsedInfo))
   }
 
   function sortWallet(wallets: WalletItem[]) {
@@ -105,14 +120,24 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
 
     // handle last used wallet info and restore walletconnect UniveralProvider
     try {
-      const lastUsedInfo = JSON.parse(localStorage.getItem('xn-last-used-info') || '{}')
+      const lastUsedInfo = JSON.parse(localStorage.getItem('xn-last-used-info') || '{}') as LastUsedWalletInfo
       const lastUsedWallet = walletMap.get(lastUsedInfo.key)
       if (lastUsedWallet) {
         lastUsedWallet.lastUsed = true
+        
+        // Restore provider based on the saved provider type
         if (lastUsedInfo.provider === 'UniversalProvider') {
           const provider = await UniversalProvider.init(walletConnectConfig)
-          if (provider.session) lastUsedWallet.setUniversalProvider(provider)
+          if (provider.session) {
+            lastUsedWallet.setUniversalProvider(provider)
+            console.log('Restored UniversalProvider for wallet:', lastUsedWallet.key)
+          }
+        } else if (lastUsedInfo.provider === 'EIP1193Provider' && lastUsedWallet.installed) {
+          // For EIP1193 providers, if the wallet is installed, it should already have the provider
+          // from the EIP6963 detection process above
+          console.log('Using detected EIP1193Provider for wallet:', lastUsedWallet.key)
         }
+        
         setLastUsedWallet(lastUsedWallet)
       }
     } catch (err) {
