@@ -2850,7 +2850,7 @@ function UO(t) {
   return Bl(`0x${e}`);
 }
 async function qO({ hash: t, signature: e }) {
-  const r = va(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-CjFIzVvG.js");
+  const r = va(t) ? t : zd(t), { secp256k1: n } = await import("./secp256k1-ChAPgt46.js");
   return `0x${(() => {
     if (typeof e == "object" && "r" in e && "s" in e) {
       const { r: l, s: d, v: p, yParity: w } = e, A = Number(w ?? p), M = C2(A);
@@ -38117,12 +38117,15 @@ function P9(t) {
   ] });
 }
 function Mne(t) {
-  var n;
+  var n, i;
   const { wallet: e, onClick: r } = t;
   return /* @__PURE__ */ le.jsxs("div", { className: "xc-flex xc-flex-col xc-items-center xc-justify-center xc-gap-4", children: [
     /* @__PURE__ */ le.jsx("img", { className: "xc-rounded-md xc-h-16 xc-w-16", src: (n = e.config) == null ? void 0 : n.image, alt: "" }),
     /* @__PURE__ */ le.jsxs("div", { className: "xc-flex xc-flex-col xc-items-center", children: [
-      /* @__PURE__ */ le.jsx("p", { className: "xc-text-danger xc-mb-2 xc-text-center", children: "Connect to Binance Wallet" }),
+      /* @__PURE__ */ le.jsxs("p", { className: "xc-text-danger xc-mb-2 xc-text-center", children: [
+        "Connect to ",
+        (i = e.config) == null ? void 0 : i.name
+      ] }),
       /* @__PURE__ */ le.jsx("div", { className: "xc-flex xc-gap-2", children: /* @__PURE__ */ le.jsx("button", { className: "xc-rounded-full xc-bg-white xc-bg-opacity-10 xc-px-6 xc-py-1", onClick: () => r(e), children: "Connect" }) })
     ] })
   ] });
