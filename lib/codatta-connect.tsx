@@ -14,19 +14,21 @@ import { WalletClient } from 'viem'
 export interface EmvWalletConnectInfo {
   chain_type: 'eip155'
   client: WalletClient,
-  connect_info: WalletSignInfo
+  connect_info: WalletSignInfo,
+  wallet: WalletItem
 }
 
 export interface TonWalletConnectInfo {
   chain_type: 'ton'
   client: TonConnect,
-  connect_info: Wallet
+  connect_info: Wallet,
+  wallet: Wallet
 }
 
 export function CodattaConnect(props: {
-  onEvmWalletConnect: (connectInfo:EmvWalletConnectInfo) => Promise<void>
-  onTonWalletConnect: (connectInfo:TonWalletConnectInfo) => Promise<void>
-  onEmailConnect: (email:string, code:string) => Promise<void>
+  onEvmWalletConnect?: (connectInfo:EmvWalletConnectInfo) => Promise<void>
+  onTonWalletConnect?: (connectInfo:TonWalletConnectInfo) => Promise<void>
+  onEmailConnect?: (email:string, code:string) => Promise<void>
   config?: {
     showEmailSignIn?: boolean
     showFeaturedWallets?: boolean
@@ -57,12 +59,17 @@ export function CodattaConnect(props: {
   }
 
   async function handleConnect(wallet: WalletItem, signInfo: WalletSignInfo) {
-    await onEvmWalletConnect({
+    await onEvmWalletConnect?.({
       chain_type: 'eip155',
       client: wallet.client!,
       connect_info: signInfo,
+      wallet: wallet,
     })
     setStep('index')
+  }
+
+  async function handleEmailConnect(email: string, code: string) {
+    await onEmailConnect?.(email, code)
   }
 
   function handleSelectTonWallet(wallet: WalletInfoRemote | WalletInfoInjectable) {
@@ -72,10 +79,11 @@ export function CodattaConnect(props: {
 
   async function handleStatusChange(wallet: Wallet | null) {
     if (!wallet) return
-    await onTonWalletConnect({
+    await onTonWalletConnect?.({
       chain_type: 'ton',
       client: connector.current!,
-      connect_info: wallet
+      connect_info: wallet,
+      wallet: wallet,
     })
   }
 
@@ -120,7 +128,7 @@ export function CodattaConnect(props: {
         ></TonWalletConnect>
       )}
       {step === 'email-connect' && (
-        <EmailConnectWidget email={email} onBack={() => setStep('index')} onInputCode={onEmailConnect} />
+        <EmailConnectWidget email={email} onBack={() => setStep('index')} onInputCode={handleEmailConnect} />
       )}
       {step === 'index' && (
         <SigninIndex

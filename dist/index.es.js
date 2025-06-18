@@ -1,8 +1,9 @@
-import { f as o, C as n, d as e, a as C, u as s } from "./main-C4Op-TDI.js";
+import { f as o, C as e, d as n, W as C, a as s, u as d } from "./main-BN1nTxTF.js";
 export {
   o as CodattaConnect,
-  n as CodattaConnectContextProvider,
-  e as CodattaSignin,
-  C as coinbaseWallet,
-  s as useCodattaConnectContext
+  e as CodattaConnectContextProvider,
+  n as CodattaSignin,
+  C as WalletItem,
+  s as coinbaseWallet,
+  d as useCodattaConnectContext
 };

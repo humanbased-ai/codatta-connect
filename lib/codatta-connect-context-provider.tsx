@@ -116,6 +116,7 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
         walletMap.set(walletItem.key, walletItem)
         wallets.push(walletItem)
       }
+      console.log(detail)
     })
 
     // handle last used wallet info and restore walletconnect UniveralProvider

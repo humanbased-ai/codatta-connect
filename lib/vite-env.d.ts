@@ -2,4 +2,7 @@
 
 interface Window {
   initAliyunCaptcha: any
+  ethereum?: {
+    isBinance: boolean
+  }
 }
