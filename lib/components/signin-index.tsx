@@ -5,6 +5,7 @@ import { WalletItem } from '../types/wallet-item.class'
 import TransitionEffect from './transition-effect'
 import { SignInOptionItem, WalletOption } from './wallet-option'
 import Spliter from './ui/spliter'
+import SingleWalletOption from './single-wallet-option'
 
 const ImageTonIcon = 'https://static.codatta.io/codatta-connect/wallet-icons.svg?v=2#ton'
 
@@ -42,10 +43,6 @@ export default function SingInIndex(props: {
   const { featuredWallets, initialized } = useCodattaConnectContext()
   const { onEmailConfirm, onSelectWallet, onSelectMoreWallets, onSelectTonConnect, config } = props
 
-  const binanceWallet = useMemo(() => {
-    return featuredWallets?.find((item) => item.config?.rdns === 'binance')
-  }, [featuredWallets])
-
   const isEmail = useMemo(() => {
     const hasChinese =
       /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]/gu
@@ -77,20 +74,18 @@ export default function SingInIndex(props: {
 
         {props.header || <div className='xc-mb-6 xc-text-xl xc-font-bold'>Log in or sign up</div>}
 
-        {/* if in binance wallet, show binance wallet */}
-        {binanceWallet && (
+        {featuredWallets.length === 1 && (
             <div className='xc-mb-4 xc-flex xc-max-h-[309px] xc-flex-col xc-gap-4 xc-overflow-scroll no-scrollbar'>
-              <WalletOption
-                wallet={binanceWallet}
-                key={`feature-${binanceWallet.key}`}
+              {featuredWallets.map((wallet) => <SingleWalletOption
+                wallet={wallet}
+                key={`feature-${wallet.key}`}
                 onClick={handleWalletClick}
-              ></WalletOption>
+              ></SingleWalletOption>)}
             </div>
           )
         }
 
-        {/* if not in binance wallet, show other wallets */}
-        {!binanceWallet && <>
+        {featuredWallets.length > 1 && <>
           <div>
             <div className="xc-mb-4 xc-flex xc-max-h-[309px] xc-flex-col xc-gap-4 xc-overflow-scroll no-scrollbar">
               {config.showFeaturedWallets && featuredWallets &&

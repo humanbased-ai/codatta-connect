@@ -73,7 +73,6 @@ export class WalletItem {
       }
     } else if ('info' in params) {
       // eip6963
-      console.log(params.info, 'installed')
       this._key = params.info.name
       this._provider = params.provider
       this._installed = true

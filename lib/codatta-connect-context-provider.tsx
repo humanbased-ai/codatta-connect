@@ -53,8 +53,8 @@ export function useCodattaConnectContext() {
 interface CodattaConnectContextProviderProps {
   children: React.ReactNode
   apiBaseUrl?: string
+  singleWalletName?: string
 }
-
 
 interface LastUsedWalletInfo {
   provider: 'UniversalProvider' | 'EIP1193Provider',
@@ -82,11 +82,17 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
   }
 
   function sortWallet(wallets: WalletItem[]) {
-    const featuredWallets = wallets.filter((item) => item.featured || item.installed)
-    const restWallets = wallets.filter((item) => !item.featured && !item.installed)
-    const sortedWallets = [...featuredWallets, ...restWallets]
-    setWallets(sortedWallets)
-    setFeaturedWallets(featuredWallets)
+
+    const singleWallet = wallets.find((item) => item.config?.name === props.singleWalletName)
+    if (singleWallet) {
+      setFeaturedWallets([singleWallet])
+    } else { 
+      const featuredWallets = wallets.filter((item) => item.featured || item.installed)
+      const restWallets = wallets.filter((item) => !item.featured && !item.installed)
+      const sortedWallets = [...featuredWallets, ...restWallets]
+      setWallets(sortedWallets)
+      setFeaturedWallets(featuredWallets)
+    }
   }
 
   async function init() {
@@ -116,7 +122,6 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
         walletMap.set(walletItem.key, walletItem)
         wallets.push(walletItem)
       }
-      console.log(detail)
     })
 
     // handle last used wallet info and restore walletconnect UniveralProvider

@@ -37,7 +37,6 @@ export default function TonWalletSelect(props: {
   async function init() {
     const wallets = await connector.getWallets()
     setWallets(wallets)
-    console.log(wallets)
   }
 
   useEffect(() => {
