@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react'
 import { WalletItem } from '../types/wallet-item.class'
 import { useCodattaConnectContext } from '../codatta-connect-context-provider'
 import { getAddress } from 'viem'
+import { mainnet } from 'viem/chains'
 
 const CONNECT_GUIDE_MESSAGE = 'Accept connection request in the wallet'
 const MESSAGE_SIGN_GUIDE_MESSAGE = 'Accept sign-in request in your wallet'
@@ -54,11 +55,12 @@ export default function WalletConnect(props: {
       // check chain
       const currentChain = await wallet.getChain()
       const findChain = chains.find((c) => c.id === currentChain)
-      const targetChain = chains[0]
-      if (!findChain) {
-        console.log('switch chain', chains[0])
+      const targetChain = findChain || chains[0] || mainnet
+
+      // chain check and switch
+      if (!findChain && chains.length > 0) {
         setGuideType('switch-chain')
-        await wallet.switchChain(chains[0])
+        await wallet.switchChain(targetChain)
       }
 
       const address = getAddress(addresses[0])
