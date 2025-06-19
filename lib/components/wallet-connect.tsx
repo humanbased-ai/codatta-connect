@@ -17,12 +17,12 @@ export interface WalletSignInfo {
   wallet_name: string
 }
 
-function getSiweMessage(address: `0x${string}`, nonce: string) {
+function getSiweMessage(address: `0x${string}`, nonce: string, chainId: number) {
   const domain = window.location.host
   const uri = window.location.href
   const message = createSiweMessage({
     address: address,
-    chainId: 1,
+    chainId: chainId,
     domain,
     nonce,
     uri,
@@ -39,18 +39,31 @@ export default function WalletConnect(props: {
   const [error, setError] = useState<string>()
   const { wallet, onSignFinish } = props
   const nonce = useRef<string>()
-  const [guideType, setGuideType] = useState<'connect' | 'sign' | 'waiting'>('connect')
-  const { saveLastUsedWallet } = useCodattaConnectContext()
+  const [guideType, setGuideType] = useState<'connect' | 'sign' | 'waiting' | 'switch-chain'>('connect')
+  const { saveLastUsedWallet, chains } = useCodattaConnectContext()
 
   async function walletSignin(nonce: string) {
     try {
       setGuideType('connect')
+      // get addresses
       const addresses = await wallet.connect()
       if (!addresses || addresses.length === 0) {
         throw new Error('Wallet connect error')
       }
+
+      // check chain
+      const currentChain = await wallet.getChain()
+      const findChain = chains.find((c) => c.id === currentChain)
+      const targetChain = chains[0]
+      if (!findChain) {
+        console.log('switch chain', chains[0])
+        setGuideType('switch-chain')
+        await wallet.switchChain(chains[0])
+      }
+
       const address = getAddress(addresses[0])
-      const message = getSiweMessage(address, nonce)
+      const message = getSiweMessage(address, nonce, targetChain.id)
+
       setGuideType('sign')
       const signature = await wallet.signMessage(message, address)
       if (!signature || signature.length === 0) {
@@ -59,8 +72,9 @@ export default function WalletConnect(props: {
       setGuideType('waiting')
       await onSignFinish(wallet, { address, signature, message, nonce, wallet_name: wallet.config?.name || '' })
       saveLastUsedWallet(wallet)
-    } catch (err: any) {
-      console.log(err.details)
+    } catch (err:any) {
+      console.log('walletSignin error', err.stack)
+      console.log(err.details || err.message)
       setError(err.details || err.message)
     }
   }
@@ -109,6 +123,7 @@ export default function WalletConnect(props: {
               <Loader2 className="xc-animate-spin"></Loader2>
             </span>
           )}
+          {guideType === 'switch-chain' && <span className="xc-text-center">Switch to {chains[0].name}</span>}
         </>
       )}
     </div>

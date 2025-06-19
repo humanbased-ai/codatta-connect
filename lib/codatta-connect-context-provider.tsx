@@ -5,6 +5,7 @@ import UniversalProvider, { UniversalProviderOpts } from '@walletconnect/univers
 import { EIP6963Detect } from './utils/eip6963-detect'
 import { createCoinbaseWalletSDK } from '@coinbase/wallet-sdk'
 import accountApi from './api/account.api'
+import { Chain } from 'viem'
 
 const walletConnectConfig: UniversalProviderOpts = {
   projectId: '7a4434fefbcc9af474fb5c995e47d286',
@@ -36,6 +37,7 @@ interface CodattaConnectContext {
   featuredWallets: WalletItem[]
   lastUsedWallet: WalletItem | null
   saveLastUsedWallet: (wallet: WalletItem) => void
+  chains: Chain[]
 }
 
 const CodattaSigninContext = createContext<CodattaConnectContext>({
@@ -43,7 +45,8 @@ const CodattaSigninContext = createContext<CodattaConnectContext>({
   lastUsedWallet: null,
   wallets: [],
   initialized: false,
-  featuredWallets: []
+  featuredWallets: [],
+  chains: []
 })
 
 export function useCodattaConnectContext() {
@@ -54,6 +57,7 @@ interface CodattaConnectContextProviderProps {
   children: React.ReactNode
   apiBaseUrl?: string
   singleWalletName?: string
+  chains?: Chain[]
 }
 
 interface LastUsedWalletInfo {
@@ -68,6 +72,7 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
   const [featuredWallets, setFeaturedWallets] = useState<WalletItem[]>([])
   const [lastUsedWallet, setLastUsedWallet] = useState<WalletItem | null>(null)
   const [initialized, setInitialized] = useState<boolean>(false)
+  const [chains, setChains] = useState<Chain[]>([])
 
   const saveLastUsedWallet = (wallet: WalletItem) => {
     setLastUsedWallet(wallet)
@@ -95,7 +100,7 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
     }
   }
 
-  async function init() {
+  async function init() {      
     const wallets: WalletItem[] = []
     const walletMap = new Map<string, WalletItem>()
 
@@ -150,6 +155,9 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
       console.log(err)
     }
 
+    // 
+    if (props.chains) setChains(props.chains)
+
     // sort wallets by featured, installed, and rest
     sortWallet(wallets)
 
@@ -169,7 +177,8 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
         wallets,
         initialized,
         lastUsedWallet,
-        featuredWallets
+        featuredWallets,
+        chains
       }}
     >
       {props.children}

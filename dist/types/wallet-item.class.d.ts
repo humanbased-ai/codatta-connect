@@ -1,4 +1,4 @@
-import { WalletClient } from 'viem';
+import { Chain, WalletClient } from 'viem';
 import { WalletConfig } from '../constant/wallet-book';
 import { default as UniversalProvider } from '@walletconnect/universal-provider';
 import { EIP6963ProviderDetail } from '../utils/eip6963-detect';
@@ -11,6 +11,7 @@ export declare class WalletItem {
     private _fatured;
     private _installed;
     lastUsed: boolean;
+    private _client;
     get address(): `0x${string}` | null;
     get connected(): boolean;
     get featured(): boolean;
@@ -29,8 +30,9 @@ export declare class WalletItem {
     constructor(params: UniversalProvider);
     EIP6963Detected(detail: EIP6963ProviderDetail): void;
     setUniversalProvider(provider: UniversalProvider): void;
+    switchChain(chain: Chain): Promise<boolean>;
     private testConnect;
-    connect(): Promise<`0x${string}`[]>;
+    connect(): Promise<import('viem').RequestAddressesReturnType>;
     getAddress(): Promise<`0x${string}`>;
     getChain(): Promise<number>;
     signMessage(message: string, address: `0x${string}`): Promise<`0x${string}` | undefined>;

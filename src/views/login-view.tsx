@@ -1,3 +1,4 @@
+import { defineChain } from "viem";
 import accountApi, { ILoginResponse } from "../../lib/api/account.api";
 import {
   EmvWalletConnectInfo,
@@ -5,6 +6,8 @@ import {
 } from "../../lib/codatta-connect";
 import { CodattaSignin, CodattaConnect, useCodattaConnectContext } from "../../lib/main";
 import React, { useEffect } from "react";
+
+
 
 export default function LoginView() {
   const { lastUsedWallet } = useCodattaConnectContext();

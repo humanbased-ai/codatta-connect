@@ -8,7 +8,7 @@ import { WalletItem } from '../types/wallet-item.class'
 import accountApi, { ILoginResponse } from '../api/account.api'
 import { useCodattaSigninContext } from '@/providers/codatta-signin-context-provider'
 
-export default function WalletLogin(props: {
+export default function EvmWalletLoginWidget(props: {
   wallet: WalletItem
   onLogin: (res: ILoginResponse) => void
   onBack: () => void

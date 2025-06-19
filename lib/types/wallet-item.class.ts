@@ -1,4 +1,4 @@
-import { EIP1193Provider, WalletClient, createWalletClient, custom } from 'viem'
+import { Chain, EIP1193Provider, WalletClient, createWalletClient, custom } from 'viem'
 import { WalletConfig } from '../constant/wallet-book'
 import UniversalProvider from '@walletconnect/universal-provider'
 import { EIP6963ProviderDetail } from '../utils/eip6963-detect'
@@ -13,6 +13,7 @@ export class WalletItem {
   private _fatured: boolean = false
   private _installed: boolean = false
   public lastUsed: boolean = false
+  private _client: WalletClient | null = null
 
   public get address() {
     return this._address
@@ -40,8 +41,8 @@ export class WalletItem {
 
 
   public get client(): WalletClient | null {
-    if (!this._provider) return null
-    return createWalletClient({ transport: custom(this._provider) })
+    if (!this._client) return null
+    return this._client
   }
 
   public get config() {
@@ -66,6 +67,7 @@ export class WalletItem {
       if (!params.session) throw new Error('session is null')
       this._key = params.session?.peer.metadata.name
       this._provider = params
+      this._client = createWalletClient({ transport: custom(this._provider) })
       this._config = {
         name: params.session.peer.metadata.name,
         image: params.session.peer.metadata.icons[0],
@@ -76,6 +78,7 @@ export class WalletItem {
       this._key = params.info.name
       this._provider = params.provider
       this._installed = true
+      this._client = createWalletClient({ transport: custom(this._provider) })
       this._config = {
         name: params.info.name,
         image: params.info.icon,
@@ -89,6 +92,7 @@ export class WalletItem {
 
   public EIP6963Detected(detail: EIP6963ProviderDetail) {
     this._provider = detail.provider
+    this._client = createWalletClient({ transport: custom(this._provider) })
     this._installed = true
     this._provider.on('disconnect', this.disconnect)
     this._provider.on('accountsChanged', (addresses: `0x${string}`[]) => {
@@ -100,7 +104,24 @@ export class WalletItem {
 
   public setUniversalProvider(provider: UniversalProvider) {
     this._provider = provider
+    this._client = createWalletClient({ transport: custom(this._provider) })
     this.testConnect()
+  }
+
+  public async switchChain(chain: Chain) {
+    try {
+      const currentChain = await this.client?.getChainId()
+      if (currentChain === chain.id) return true
+      await this.client?.switchChain(chain)
+      return true
+    } catch (error: any) {
+      if (error.code === 4902) {
+        await this.client?.addChain({chain})
+        await this.client?.switchChain(chain)
+        return true
+      }
+      throw error
+    }
   }
 
   private async testConnect() {
@@ -115,7 +136,7 @@ export class WalletItem {
   }
 
   async connect() {
-    const addresses = await this.client?.request({ method: 'eth_requestAccounts', params: undefined })
+    const addresses = await this.client?.requestAddresses()
     if (!addresses) throw new Error('connect failed')
     return addresses
   }
@@ -132,7 +153,7 @@ export class WalletItem {
     return chain
   }
 
-  async signMessage(message: string, address:`0x${string}`) {
+  async signMessage(message: string, address: `0x${string}`) {
     const signature = await this.client?.signMessage({ message, account: address })
     return signature
   }
@@ -140,7 +161,7 @@ export class WalletItem {
   async disconnect() {
     if (this._provider && 'session' in this._provider) {
       await this._provider.disconnect()
-    } 
+    }
     this._connected = false
     this._address = null
   }
