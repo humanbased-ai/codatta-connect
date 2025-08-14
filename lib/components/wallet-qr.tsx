@@ -29,10 +29,10 @@ const walletProviderConnectConfig = {
         'personal_sign',
         'eth_signTypedData',
       ],
-      chains: ['eip155:1'],
+      chains: ['eip155:56'],
       events: ['chainChanged', 'accountsChanged', 'disconnect'],
       rpcMap: {
-        1: `https://rpc.walletconnect.com?chainId=eip155:1&projectId=${WALLETCONNECT_PROJECT_ID}`,
+        1: `https://rpc.walletconnect.com?chainId=eip155:56&projectId=${WALLETCONNECT_PROJECT_ID}`,
       },
     },
   },
