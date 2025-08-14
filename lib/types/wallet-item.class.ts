@@ -73,6 +73,7 @@ export class WalletItem {
         image: params.session.peer.metadata.icons[0],
         featured: false,
       }
+      this.testConnect()
     } else if ('info' in params) {
       // eip6963
       this._key = params.info.name

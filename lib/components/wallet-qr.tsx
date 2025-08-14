@@ -130,6 +130,7 @@ export default function WalletQr(props: {
         address,
         wallet_name: newWallet.config?.name || wallet.config?.name || ''
       })
+      console.log('save wallet connect wallet!')
       saveLastUsedWallet(newWallet)
     } catch (err: any) {
       console.log('err', err)
