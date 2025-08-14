@@ -133,23 +133,15 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
     try {
       const lastUsedInfo = JSON.parse(localStorage.getItem('xn-last-used-info') || '{}') as LastUsedWalletInfo
       const lastUsedWallet = walletMap.get(lastUsedInfo.key)
-      if (lastUsedWallet) {
-        lastUsedWallet.lastUsed = true
-        
-        // Restore provider based on the saved provider type
-        if (lastUsedInfo.provider === 'UniversalProvider') {
-          const provider = await UniversalProvider.init(walletConnectConfig)
-          if (provider.session) {
-            lastUsedWallet.setUniversalProvider(provider)
-            console.log('Restored UniversalProvider for wallet:', lastUsedWallet.key)
-          }
-        } else if (lastUsedInfo.provider === 'EIP1193Provider' && lastUsedWallet.installed) {
-          // For EIP1193 providers, if the wallet is installed, it should already have the provider
-          // from the EIP6963 detection process above
-          console.log('Using detected EIP1193Provider for wallet:', lastUsedWallet.key)
-        }
-        
+      if (lastUsedWallet && lastUsedInfo.provider === 'EIP1193Provider' && lastUsedWallet.installed) {
         setLastUsedWallet(lastUsedWallet)
+      } else if (lastUsedInfo.provider === 'UniversalProvider') {
+        const provider = await UniversalProvider.init(walletConnectConfig)
+        if (provider.session) {
+          const universalWallet = new WalletItem(provider)
+          setLastUsedWallet(universalWallet)
+          console.log('Restored UniversalProvider for wallet:', universalWallet.key)
+        }
       }
     } catch (err) {
       console.log(err)
