@@ -78,7 +78,7 @@ export default function GetWallet(props: { wallet: WalletItem }) {
           <InstallOption
             link={links.chromeStoreLink}
             icon={`${walletIconsImage}#chrome`}
-            title="Google Play Store"
+            title="Chrome Web Store"
           ></InstallOption>
         )}
         {config?.app_store_id && (

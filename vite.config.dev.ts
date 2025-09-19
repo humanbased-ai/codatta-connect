@@ -35,8 +35,9 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
   },
-
   server: {
+    host: "0.0.0.0",
+    allowedHosts:["1064wf31dw492.vicp.fun"],
     proxy: {
       '/api': {
         target: 'https://app-test.b18a.io',

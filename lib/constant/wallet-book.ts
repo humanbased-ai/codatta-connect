@@ -58,6 +58,7 @@ export const WalletBook: WalletConfig[] = [
     featured: true,
     image: `${walletIconsImage}#ebac7b39-688c-41e3-7912-a4fefba74600`,
     getWallet: {
+      chrome_store_id: 'cadiboklkpojfamcoggejbbdjcoiljjk',
       play_store_id: 'com.binance.dev',
       app_store_id: 'id1436799971',
     }
