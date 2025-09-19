@@ -11,6 +11,7 @@ import React, { useEffect } from "react";
 
 export default function LoginView() {
   const { lastUsedWallet } = useCodattaConnectContext();
+  const userAgent = navigator.userAgent;
 
   useEffect(() => {
     console.log(lastUsedWallet, 'lastUsedWallet change')
@@ -66,7 +67,7 @@ export default function LoginView() {
   }
 
   return (
-    <>
+    <div>
       {/* <CodattaConnect
         onEmailConnect={handleEmailConnect}
         onEvmWalletConnect={handleEvmWalletConnect}
@@ -85,6 +86,6 @@ export default function LoginView() {
       inviterCode:'',
       role: 'B',
     }}></CodattaSignin>
-    </>
+    </div>
   );
 }
