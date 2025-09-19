@@ -29,6 +29,7 @@ export function CodattaConnect(props: {
   onEvmWalletConnect?: (connectInfo:EmvWalletConnectInfo) => Promise<void>
   onTonWalletConnect?: (connectInfo:TonWalletConnectInfo) => Promise<void>
   onEmailConnect?: (email:string, code:string) => Promise<void>
+  header?: React.ReactNode
   config?: {
     showEmailSignIn?: boolean
     showFeaturedWallets?: boolean
@@ -36,7 +37,7 @@ export function CodattaConnect(props: {
     showTonConnect?: boolean
   }
 }) {
-  const { onEvmWalletConnect, onTonWalletConnect, onEmailConnect, config = {
+  const { onEvmWalletConnect, onTonWalletConnect, onEmailConnect, header, config = {
     showEmailSignIn: false,
     showFeaturedWallets: true,
     showMoreWallets: true,
@@ -132,6 +133,7 @@ export function CodattaConnect(props: {
       )}
       {step === 'index' && (
         <SigninIndex
+          header={header}
           onEmailConfirm={handleSelectEmail}
           onSelectWallet={handleSelectWallet}
           onSelectMoreWallets={() => setStep('evm-wallet-select')}

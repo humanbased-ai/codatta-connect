@@ -18,6 +18,7 @@ export declare function CodattaConnect(props: {
     onEvmWalletConnect?: (connectInfo: EmvWalletConnectInfo) => Promise<void>;
     onTonWalletConnect?: (connectInfo: TonWalletConnectInfo) => Promise<void>;
     onEmailConnect?: (email: string, code: string) => Promise<void>;
+    header?: React.ReactNode;
     config?: {
         showEmailSignIn?: boolean;
         showFeaturedWallets?: boolean;
