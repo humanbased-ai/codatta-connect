@@ -54,6 +54,15 @@ export const WalletBook: WalletConfig[] = [
     universal_link: 'https://metamask.app.link/wc',
   },
   {
+    name: 'Binance Wallet',
+    featured: true,
+    image: `${walletIconsImage}#ebac7b39-688c-41e3-7912-a4fefba74600`,
+    getWallet: {
+      play_store_id: 'com.binance.dev',
+      app_store_id: 'id1436799971',
+    }
+  },
+  {
     featured: true,
 
     name: 'OKX Wallet',
@@ -128,14 +137,6 @@ export const WalletBook: WalletConfig[] = [
       brave_store_id: "acmacodkjbdgmoleebolmdjonilkdbch",
       play_store_id: "com.debank.rabbymobile",
       app_store_id: "id6474381673",
-    }
-  },{
-    name: 'Binance Web3 Wallet',
-    featured: false,
-    image: `${walletIconsImage}#ebac7b39-688c-41e3-7912-a4fefba74600`,
-    getWallet: {
-      play_store_id: 'com.binance.dev',
-      app_store_id: 'id1436799971',
     }
   },
   {
