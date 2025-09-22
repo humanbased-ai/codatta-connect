@@ -17,7 +17,7 @@ export default function EmailConnectWidget(props: {
   return (
     <TransitionEffect>
       <div className="xc-mb-12">
-        <ControlHead title="Sign in with email" onBack={props.onBack}></ControlHead>
+        <ControlHead title="Connect with email" onBack={props.onBack}></ControlHead>
       </div>
       {step === 'captcha' && <EmailCaptcha email={email} onCodeSend={() => setStep('verify-email')} />}
       {step === 'verify-email' && <EmailConnect email={email} onInputCode={props.onInputCode} onResendCode={() => setStep('captcha')}></EmailConnect>}

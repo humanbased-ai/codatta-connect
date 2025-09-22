@@ -69,6 +69,7 @@ export function CodattaSignin(props: {
         {step === 'index' && (
           <SigninIndex
             header={header}
+            useSingleWallet={true}
             onEmailConfirm={handleSelectEmail}
             onSelectWallet={handleSelectWallet}
             onSelectMoreWallets={() => { setStep('all-wallet') }}
