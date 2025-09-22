@@ -78,7 +78,8 @@ export default function LoginView() {
           showTonConnect: true,
           showMoreWallets: true,
         }}
-      ></CodattaConnect>*/}
+        header={<div>heiheiha</div>}
+      ></CodattaConnect> */}
       <CodattaSignin onLogin={handleLogin} config={{
       channel:'test',
       device:'WEB',

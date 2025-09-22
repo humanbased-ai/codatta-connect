@@ -134,6 +134,7 @@ export function CodattaConnect(props: {
       {step === 'index' && (
         <SigninIndex
           header={header}
+          useSingleWallet={false}
           onEmailConfirm={handleSelectEmail}
           onSelectWallet={handleSelectWallet}
           onSelectMoreWallets={() => setStep('evm-wallet-select')}
