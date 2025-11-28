@@ -25,7 +25,7 @@ const BSC_CHAIN = defineChain({
 })
 
 export default function AppLayout(props: { children: React.ReactNode }) {
-  return <CodattaConnectContextProvider singleWalletName='MetaMask'  chains={[]}>
+  return <CodattaConnectContextProvider  chains={[]}>
     <div className='xc-h-screen xc-flex xc-items-center xc-justify-center xc-bg-black'>
       {props.children}
     </div>
