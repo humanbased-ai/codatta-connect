@@ -19,22 +19,39 @@ const walletConnectConfig:UniversalProviderOpts = {
   },
 }
 
+const EIP155_METHODS = [
+  'eth_sendTransaction',
+  'eth_signTransaction',
+  'eth_sign',
+  'personal_sign',
+  'eth_signTypedData',
+  'eth_signTypedData_v3',
+  'eth_signTypedData_v4',
+  'wallet_switchEthereumChain',
+  'wallet_addEthereumChain',
+]
+
+const EIP155_EVENTS = ['chainChanged', 'accountsChanged', 'disconnect']
+
 const walletProviderConnectConfig = {
   namespaces: {
     eip155: {
-      methods: [
-        'eth_sendTransaction',
-        'eth_signTransaction',
-        'eth_sign',
-        'personal_sign',
-        'eth_signTypedData',
-        'eth_signTypedData_v3',
-        'eth_signTypedData_v4',
-      ],
+      methods: EIP155_METHODS,
       chains: ['eip155:56'],
-      events: ['chainChanged', 'accountsChanged', 'disconnect'],
+      events: EIP155_EVENTS,
       rpcMap: {
-        1: `https://rpc.walletconnect.com?chainId=eip155:56&projectId=${WALLETCONNECT_PROJECT_ID}`,
+        56: 'https://bsc-dataseed.binance.org',
+      },
+    },
+  },
+  optionalNamespaces: {
+    eip155: {
+      methods: EIP155_METHODS,
+      chains: ['eip155:8453', 'eip155:84532'],
+      events: EIP155_EVENTS,
+      rpcMap: {
+        8453: 'https://mainnet.base.org',
+        84532: 'https://sepolia.base.org',
       },
     },
   },
