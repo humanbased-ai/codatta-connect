@@ -28,6 +28,7 @@ function getSiweMessage(address: `0x${string}`, nonce: string, chainId: number) 
     nonce,
     uri,
     version: '1',
+    requestId: crypto.randomUUID(),
   })
   return message
 }
