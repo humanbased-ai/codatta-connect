@@ -5,6 +5,7 @@ export default function SingInIndex(props: {
     onSelectWallet: (walletOption: WalletItem) => void;
     onSelectMoreWallets: () => void;
     onSelectTonConnect: () => void;
+    useSingleWallet: boolean;
     config: {
         showEmailSignIn?: boolean;
         showTonConnect?: boolean;

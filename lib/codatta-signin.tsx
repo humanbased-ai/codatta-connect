@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import SigninIndex from './components/signin-index'
-import EmailLoginWidget from './components/email-login'
+import EmailLoginWidget from './components/email-login-widget'
 import EvmWalletLoginWidget from './components/evm-wallet-login-widget'
 import TonWalletLoginWidget from './components/ton-wallet-login-widget'
 import AnimateContainer from './components/animate-container'
@@ -69,6 +69,7 @@ export function CodattaSignin(props: {
         {step === 'index' && (
           <SigninIndex
             header={header}
+            useSingleWallet={true}
             onEmailConfirm={handleSelectEmail}
             onSelectWallet={handleSelectWallet}
             onSelectMoreWallets={() => { setStep('all-wallet') }}
@@ -81,9 +82,10 @@ export function CodattaSignin(props: {
             }}
           ></SigninIndex>
         )}
-        {step === 'all-wallet' && (<EvmWalletSelect onBack={() => setStep('index')}
-          onSelectWallet={handleSelectWallet}
-        ></EvmWalletSelect>
+        {step === 'all-wallet' && (
+          <EvmWalletSelect onBack={() => setStep('index')}
+            onSelectWallet={handleSelectWallet}
+          ></EvmWalletSelect>
         )}
       </AnimateContainer>
     </CodattaSinginContextProvider>

@@ -1,6 +1,6 @@
 import { WalletItem } from '../types/wallet-item.class';
 import { ILoginResponse } from '../api/account.api';
-export default function WalletLogin(props: {
+export default function EvmWalletLoginWidget(props: {
     wallet: WalletItem;
     onLogin: (res: ILoginResponse) => void;
     onBack: () => void;

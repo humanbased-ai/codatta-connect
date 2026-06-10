@@ -5,6 +5,7 @@ import UniversalProvider, { UniversalProviderOpts } from '@walletconnect/univers
 import { EIP6963Detect } from './utils/eip6963-detect'
 import { createCoinbaseWalletSDK } from '@coinbase/wallet-sdk'
 import accountApi from './api/account.api'
+import { Chain } from 'viem'
 
 const walletConnectConfig: UniversalProviderOpts = {
   projectId: '7a4434fefbcc9af474fb5c995e47d286',
@@ -36,6 +37,7 @@ interface CodattaConnectContext {
   featuredWallets: WalletItem[]
   lastUsedWallet: WalletItem | null
   saveLastUsedWallet: (wallet: WalletItem) => void
+  chains: Chain[]
 }
 
 const CodattaSigninContext = createContext<CodattaConnectContext>({
@@ -43,7 +45,8 @@ const CodattaSigninContext = createContext<CodattaConnectContext>({
   lastUsedWallet: null,
   wallets: [],
   initialized: false,
-  featuredWallets: []
+  featuredWallets: [],
+  chains: []
 })
 
 export function useCodattaConnectContext() {
@@ -53,6 +56,14 @@ export function useCodattaConnectContext() {
 interface CodattaConnectContextProviderProps {
   children: React.ReactNode
   apiBaseUrl?: string
+  singleWalletName?: string
+  chains?: Chain[]
+}
+
+interface LastUsedWalletInfo {
+  provider: 'UniversalProvider' | 'EIP1193Provider',
+  key: string,
+  timestamp: number
 }
 
 export function CodattaConnectContextProvider(props: CodattaConnectContextProviderProps) {
@@ -61,20 +72,35 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
   const [featuredWallets, setFeaturedWallets] = useState<WalletItem[]>([])
   const [lastUsedWallet, setLastUsedWallet] = useState<WalletItem | null>(null)
   const [initialized, setInitialized] = useState<boolean>(false)
+  const [chains, setChains] = useState<Chain[]>([])
 
   const saveLastUsedWallet = (wallet: WalletItem) => {
-    console.log('saveLastUsedWallet', wallet)
+    setLastUsedWallet(wallet)
+
+    const providerType = wallet.provider instanceof UniversalProvider ? 'UniversalProvider' : 'EIP1193Provider'
+    const lastUsedInfo: LastUsedWalletInfo = {
+      provider: providerType,
+      key: wallet.key,
+      timestamp: Date.now()
+    }
+    localStorage.setItem('xn-last-used-info', JSON.stringify(lastUsedInfo))
   }
 
   function sortWallet(wallets: WalletItem[]) {
-    const featuredWallets = wallets.filter((item) => item.featured || item.installed)
-    const restWallets = wallets.filter((item) => !item.featured && !item.installed)
-    const sortedWallets = [...featuredWallets, ...restWallets]
-    setWallets(sortedWallets)
-    setFeaturedWallets(featuredWallets)
+
+    const singleWallet = wallets.find((item) => item.config?.name === props.singleWalletName)
+    if (singleWallet) {
+      setFeaturedWallets([singleWallet])
+    } else { 
+      const featuredWallets = wallets.filter((item) => item.featured || item.installed)
+      const restWallets = wallets.filter((item) => !item.featured && !item.installed)
+      const sortedWallets = [...featuredWallets, ...restWallets]
+      setWallets(sortedWallets)
+      setFeaturedWallets(featuredWallets)
+    }
   }
 
-  async function init() {
+  async function init() {      
     const wallets: WalletItem[] = []
     const walletMap = new Map<string, WalletItem>()
 
@@ -105,19 +131,24 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
 
     // handle last used wallet info and restore walletconnect UniveralProvider
     try {
-      const lastUsedInfo = JSON.parse(localStorage.getItem('xn-last-used-info') || '{}')
+      const lastUsedInfo = JSON.parse(localStorage.getItem('xn-last-used-info') || '{}') as LastUsedWalletInfo
       const lastUsedWallet = walletMap.get(lastUsedInfo.key)
-      if (lastUsedWallet) {
-        lastUsedWallet.lastUsed = true
-        if (lastUsedInfo.provider === 'UniversalProvider') {
-          const provider = await UniversalProvider.init(walletConnectConfig)
-          if (provider.session) lastUsedWallet.setUniversalProvider(provider)
-          }
+      if (lastUsedWallet && lastUsedInfo.provider === 'EIP1193Provider' && lastUsedWallet.installed) {
         setLastUsedWallet(lastUsedWallet)
+      } else if (lastUsedInfo.provider === 'UniversalProvider') {
+        const provider = await UniversalProvider.init(walletConnectConfig)
+        if (provider.session) {
+          const universalWallet = new WalletItem(provider)
+          setLastUsedWallet(universalWallet)
+          console.log('Restored UniversalProvider for wallet:', universalWallet.key)
+        }
       }
     } catch (err) {
       console.log(err)
     }
+
+    // 
+    if (props.chains) setChains(props.chains)
 
     // sort wallets by featured, installed, and rest
     sortWallet(wallets)
@@ -138,7 +169,8 @@ export function CodattaConnectContextProvider(props: CodattaConnectContextProvid
         wallets,
         initialized,
         lastUsedWallet,
-        featuredWallets
+        featuredWallets,
+        chains
       }}
     >
       {props.children}

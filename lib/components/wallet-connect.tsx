@@ -4,59 +4,80 @@ import accountApi from '../api/account.api'
 import { Loader2 } from 'lucide-react'
 import { WalletItem } from '../types/wallet-item.class'
 import { useCodattaConnectContext } from '../codatta-connect-context-provider'
+import { getAddress } from 'viem'
+import { mainnet } from 'viem/chains'
 
 const CONNECT_GUIDE_MESSAGE = 'Accept connection request in the wallet'
 const MESSAGE_SIGN_GUIDE_MESSAGE = 'Accept sign-in request in your wallet'
 
-function getSiweMessage(address: `0x${string}`, nonce: string) {
+export interface WalletSignInfo {
+  message: string
+  nonce: string
+  signature: string
+  address: string
+  wallet_name: string
+}
+
+function getSiweMessage(address: `0x${string}`, nonce: string, chainId: number) {
   const domain = window.location.host
   const uri = window.location.href
   const message = createSiweMessage({
     address: address,
-    chainId: 1,
+    chainId: chainId,
     domain,
     nonce,
     uri,
     version: '1',
+    requestId: crypto.randomUUID(),
   })
   return message
 }
 
 export default function WalletConnect(props: {
   wallet: WalletItem
-  onSignFinish: (wallet:WalletItem , params: {
-    message: string
-    nonce: string
-    signature: string
-    address: string
-    wallet_name: string
-  }) => Promise<void>
+  onSignFinish: (wallet: WalletItem, params: WalletSignInfo) => Promise<void>
   onShowQrCode: () => void
 }) {
   const [error, setError] = useState<string>()
   const { wallet, onSignFinish } = props
   const nonce = useRef<string>()
-  const [guideType, setGuideType] = useState<'connect' | 'sign' | 'waiting'>('connect')
-  const { saveLastUsedWallet } = useCodattaConnectContext()
+  const [guideType, setGuideType] = useState<'connect' | 'sign' | 'waiting' | 'switch-chain'>('connect')
+  const { saveLastUsedWallet, chains } = useCodattaConnectContext()
 
   async function walletSignin(nonce: string) {
     try {
       setGuideType('connect')
-      const address = await wallet.connect()
-      if (!address || address.length === 0) {
+      // get addresses
+      const addresses = await wallet.connect()
+      if (!addresses || addresses.length === 0) {
         throw new Error('Wallet connect error')
       }
-      const message = getSiweMessage(address[0], nonce)
+
+      // check chain
+      const currentChain = await wallet.getChain()
+      const findChain = chains.find((c) => c.id === currentChain)
+      const targetChain = findChain || chains[0] || mainnet
+
+      // chain check and switch
+      if (!findChain && chains.length > 0) {
+        setGuideType('switch-chain')
+        await wallet.switchChain(targetChain)
+      }
+
+      const address = getAddress(addresses[0])
+      const message = getSiweMessage(address, nonce, targetChain.id)
+
       setGuideType('sign')
-      const signature = await wallet.signMessage(message, address[0])
+      const signature = await wallet.signMessage(message, address)
       if (!signature || signature.length === 0) {
         throw new Error('user sign error')
       }
       setGuideType('waiting')
-      await onSignFinish(wallet, { address: address[0], signature, message, nonce, wallet_name: wallet.config?.name || '' })
+      await onSignFinish(wallet, { address, signature, message, nonce, wallet_name: wallet.config?.name || '' })
       saveLastUsedWallet(wallet)
-    } catch (err: any) {
-      console.log(err.details)
+    } catch (err:any) {
+      console.log('walletSignin error', err.stack)
+      console.log(err.details || err.message)
       setError(err.details || err.message)
     }
   }
@@ -69,7 +90,7 @@ export default function WalletConnect(props: {
   async function initWalletConnect() {
     try {
       setError('')
-      const res = await accountApi.getNonce({account_type: 'block_chain'})
+      const res = await accountApi.getNonce({ account_type: 'block_chain' })
       nonce.current = res
       walletSignin(nonce.current)
     } catch (err: any) {
@@ -105,6 +126,7 @@ export default function WalletConnect(props: {
               <Loader2 className="xc-animate-spin"></Loader2>
             </span>
           )}
+          {guideType === 'switch-chain' && <span className="xc-text-center">Switch to {chains[0].name}</span>}
         </>
       )}
     </div>

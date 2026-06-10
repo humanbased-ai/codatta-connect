@@ -5,6 +5,7 @@ import { WalletItem } from '../types/wallet-item.class'
 import TransitionEffect from './transition-effect'
 import { SignInOptionItem, WalletOption } from './wallet-option'
 import Spliter from './ui/spliter'
+import SingleWalletOption from './single-wallet-option'
 
 const ImageTonIcon = 'https://static.codatta.io/codatta-connect/wallet-icons.svg?v=2#ton'
 
@@ -31,6 +32,7 @@ export default function SingInIndex(props: {
   onSelectWallet: (walletOption: WalletItem) => void
   onSelectMoreWallets: () => void
   onSelectTonConnect: () => void
+  useSingleWallet: boolean
   config: {
     showEmailSignIn?: boolean
     showTonConnect?: boolean
@@ -40,7 +42,7 @@ export default function SingInIndex(props: {
 }) {
   const [email, setEmail] = useState('')
   const { featuredWallets, initialized } = useCodattaConnectContext()
-  const { onEmailConfirm, onSelectWallet, onSelectMoreWallets, onSelectTonConnect, config } = props
+  const { onEmailConfirm, onSelectWallet, onSelectMoreWallets, onSelectTonConnect, config, useSingleWallet } = props
 
   const isEmail = useMemo(() => {
     const hasChinese =
@@ -70,41 +72,52 @@ export default function SingInIndex(props: {
   return (
     <TransitionEffect>
       {initialized && <>
-      
-      {props.header || <div className='xc-mb-6 xc-text-xl xc-font-bold'>Log in or sign up</div>}
 
-      {config.showEmailSignIn && (
-        <div className="xc-mb-4">
-          <input className='xc-w-full xc-bg-transparent xc-border-white xc-border xc-border-opacity-15 xc-h-10 xc-rounded-lg xc-px-3 xc-mb-3' placeholder='Enter your email' type="email" onChange={handleEmailChange} onKeyDown={handleInputKeyDown} />
-          <button disabled={!isEmail} className='xc-bg-[rgb(135,93,255)] xc-text-white xc-w-full xc-rounded-lg xc-py-2 disabled:xc-bg-opacity-10 disabled:xc-text-opacity-50 disabled:xc-bg-white xc-transition-all' onClick={handleEmailLogin}>Continue</button>
-        </div>
-      )}
+        {props.header || <div className='xc-mb-6 xc-text-xl xc-font-bold'>Log in or sign up</div>}
 
-      {config.showEmailSignIn && (config.showFeaturedWallets || config.showTonConnect) && <div className='xc-mb-4'>
-        <Spliter className='xc-opacity-20'> <span className='xc-text-sm xc-opacity-20'>OR</span></Spliter>
-      </div>
-      }
+        {(featuredWallets.length === 1 && useSingleWallet) ? (
+          <div className='xc-mb-4 xc-flex xc-max-h-[309px] xc-flex-col xc-gap-4 xc-overflow-scroll no-scrollbar'>
+            {featuredWallets.map((wallet) => <SingleWalletOption
+              wallet={wallet}
+              key={`feature-${wallet.key}`}
+              onClick={handleWalletClick}
+            ></SingleWalletOption>)}
+          </div>
+        )
+          : <>
+            <div>
+              <div className="xc-mb-4 xc-flex xc-max-h-[309px] xc-flex-col xc-gap-4 xc-overflow-scroll no-scrollbar">
+                {config.showFeaturedWallets && featuredWallets &&
+                  featuredWallets.map((wallet) => (
+                    <WalletOption
+                      wallet={wallet}
+                      key={`feature-${wallet.key}`}
+                      onClick={handleWalletClick}
+                    ></WalletOption>
+                  ))}
+                {config.showTonConnect && (
+                  <SignInOptionItem
+                    icon={<img className="xc-h-5 xc-w-5" src={ImageTonIcon}></img>}
+                    title="TON Connect"
+                    onClick={onSelectTonConnect}
+                  ></SignInOptionItem>
+                )}
+              </div>
+              {config.showMoreWallets && <MoreWallets onClick={onSelectMoreWallets} />}
+            </div>
 
-      <div>
-        <div className="xc-mb-4 xc-flex xc-max-h-[309px] xc-flex-col xc-gap-4 xc-overflow-scroll no-scrollbar">
-          {config.showFeaturedWallets && featuredWallets &&
-            featuredWallets.map((wallet) => (
-              <WalletOption
-                wallet={wallet}
-                key={`feature-${wallet.key}`}
-                onClick={handleWalletClick}
-              ></WalletOption>
-            ))}
-          {config.showTonConnect && (
-            <SignInOptionItem
-              icon={<img className="xc-h-5 xc-w-5" src={ImageTonIcon}></img>}
-              title="TON Connect"
-              onClick={onSelectTonConnect}
-            ></SignInOptionItem>
-          )}
-        </div>
-        {config.showMoreWallets && <MoreWallets onClick={onSelectMoreWallets} />}
-      </div>
+            {config.showEmailSignIn && (config.showFeaturedWallets || config.showTonConnect) && <div className='xc-mb-4 xc-mt-4'>
+              <Spliter className='xc-opacity-20'> <span className='xc-text-sm xc-opacity-20'>OR</span></Spliter>
+            </div>
+            }
+
+            {config.showEmailSignIn && (
+              <div className="xc-mb-4">
+                <input className='xc-w-full xc-bg-transparent xc-border-white xc-border xc-border-opacity-15 xc-h-10 xc-rounded-lg xc-px-3 xc-mb-3' placeholder='Enter your email' type="email" onChange={handleEmailChange} onKeyDown={handleInputKeyDown} />
+                <button disabled={!isEmail} className='xc-bg-[rgb(135,93,255)] xc-text-white xc-w-full xc-rounded-lg xc-py-2 disabled:xc-bg-opacity-10 disabled:xc-text-opacity-50 disabled:xc-bg-white xc-transition-all' onClick={handleEmailLogin}>Continue</button>
+              </div>
+            )}
+          </>}
       </>}
     </TransitionEffect>
   )

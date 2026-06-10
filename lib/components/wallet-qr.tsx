@@ -101,7 +101,6 @@ export default function WalletQr(props: {
     try {
       setGuideType('scan')
       provider.on('display_uri', (uri:string) => {
-        console.log('display_uri', uri)
         setWcUri(uri)
         setUriLoading(false)
         setGuideType('scan')
@@ -131,11 +130,11 @@ export default function WalletQr(props: {
         address,
         wallet_name: newWallet.config?.name || wallet.config?.name || ''
       })
+      console.log('save wallet connect wallet!')
       saveLastUsedWallet(newWallet)
     } catch (err: any) {
       console.log('err', err)
       setError(err.details || err.message)
-      
     }
   }
 
