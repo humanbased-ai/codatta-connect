@@ -34,22 +34,15 @@ const EIP155_METHODS = [
 const EIP155_EVENTS = ['chainChanged', 'accountsChanged', 'disconnect']
 
 const walletProviderConnectConfig = {
-  namespaces: {
-    eip155: {
-      methods: EIP155_METHODS,
-      chains: ['eip155:56'],
-      events: EIP155_EVENTS,
-      rpcMap: {
-        56: 'https://bsc-dataseed.binance.org',
-      },
-    },
-  },
+  // requiredNamespaces is deprecated in WalletConnect (CAIP-25); wallets like
+  // OKX only read optionalNamespaces, so all chains must live here.
   optionalNamespaces: {
     eip155: {
       methods: EIP155_METHODS,
-      chains: ['eip155:8453', 'eip155:84532'],
+      chains: ['eip155:56', 'eip155:8453', 'eip155:84532'],
       events: EIP155_EVENTS,
       rpcMap: {
+        56: 'https://bsc-dataseed.binance.org',
         8453: 'https://mainnet.base.org',
         84532: 'https://sepolia.base.org',
       },
