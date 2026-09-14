@@ -7,7 +7,7 @@
   "types": "./dist/main.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codatta/codatta-connect.git"
+    "url": "git+https://github.com/humanbased-ai/codatta-connect.git"
   },
   "scripts": {
     "dev": "vite dev -c vite.config.dev.ts",

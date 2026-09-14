@@ -12,8 +12,8 @@ const WALLETCONNECT_PROJECT_ID = '7a4434fefbcc9af474fb5c995e47d286'
 const walletConnectConfig:UniversalProviderOpts = {
   projectId: WALLETCONNECT_PROJECT_ID,
   metadata: {
-    name: 'codatta',
-    description: 'codatta',
+    name: 'Humanbased',
+    description: 'Humanbased',
     url: 'https://codatta.io/',
     icons: ['https://avatars.githubusercontent.com/u/171659315'],
   },

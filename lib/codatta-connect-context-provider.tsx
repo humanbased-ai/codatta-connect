@@ -9,15 +9,15 @@ import accountApi from './api/account.api'
 const walletConnectConfig: UniversalProviderOpts = {
   projectId: '7a4434fefbcc9af474fb5c995e47d286',
   metadata: {
-    name: 'codatta',
-    description: 'codatta',
+    name: 'Humanbased',
+    description: 'Humanbased',
     url: 'https://codatta.io/',
     icons: ['https://avatars.githubusercontent.com/u/171659315'],
   },
 }
 
 export const coinbaseWallet = createCoinbaseWalletSDK({
-  appName: 'codatta',
+  appName: 'Humanbased',
   appLogoUrl: 'https://avatars.githubusercontent.com/u/171659315'
 })
 

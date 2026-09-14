@@ -1,14 +1,16 @@
 ![brand-image](https://raw.githubusercontent.com/codatta/assets/refs/heads/main/brand-v3.png)
 
-# Codatta Connect
+# Humanbased Connect
 
-Codatta Connect is a set of tools that helps quickly integrate Codatta-based login and wallet linking features into applications. Codatta Connect provide sign up UI base on react and tailwindcss.
+Humanbased Connect provides React and Tailwind components for login and wallet linking.
 
 # Quickstart
 
 ## Installation
 
-Codatta Connect is available as an npm package.
+> Note: the npm package is still published as `codatta-connect`; the package/API rename is planned as a separate breaking release.
+
+Humanbased Connect is available as an npm package.
 
 ```bash
 npm i codatta-connect
