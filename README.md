@@ -2,7 +2,7 @@
 
 # Humanbased Connect
 
-Humanbased Connect is a set of tools that helps quickly integrate Humanbased-based login and wallet linking features into applications. Humanbased Connect provide sign up UI base on react and tailwindcss.
+Humanbased Connect provides React and Tailwind components for login and wallet linking.
 
 # Quickstart
 
